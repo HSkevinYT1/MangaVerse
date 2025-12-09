@@ -822,9 +822,6 @@
 
     <script>
         
-        // --- FUNCIONES DE VISTA DE HOME ---
-        // Nota: Las variables 'mangas', 'currentPage', 'selectedManga', etc., 
-        // están definidas en el archivo mangas.js cargado arriba.
 
         function renderMangas() {
             const mangaGrid = document.getElementById('mangaGrid');
@@ -833,7 +830,6 @@
             recentGrid.innerHTML = '';
 
             mangas.forEach(manga => {
-                // Full cards
                 const card = document.createElement('div');
                 card.className = 'manga-card';
                 card.onclick = () => openManga(manga);
@@ -856,7 +852,6 @@
                 `;
                 mangaGrid.appendChild(card);
 
-                // Recent cards
                 const recentCard = document.createElement('div');
                 recentCard.className = 'recent-card';
                 const chapterIdDisplay = manga.chapter_list.length > 0 ? `Cap. ${manga.chapter_list[0].id}` : 'N/A';
@@ -873,8 +868,6 @@
                 recentGrid.appendChild(recentCard);
             });
         }
-
-        // --- FUNCIONES DE VISTA DE LECTOR ---
 
         function openManga(manga) {
             selectedManga = manga;
@@ -897,7 +890,6 @@
             currentChapter = null;
             document.getElementById('chapterTitle').textContent = "Selecciona un Capítulo";
             
-            // Placeholder en el área de lectura (centrado por Flexbox en page-display)
             const pageDisplay = document.getElementById('pageDisplay');
             pageDisplay.innerHTML = `
                 <div class="page-number" style="font-size: 1.5rem; color: #a78bfa;">¡Bienvenido al Lector!</div>
@@ -934,11 +926,11 @@
             
             if (!sortAscending) {
                 chapters.sort((a, b) => b.id - a.id);
-                // Icono para descendente (N -> 1)
+               
                 if(sortIcon) sortIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l-4 4m4-4l-4-4m4 4H7"></path>`;
             } else {
                 chapters.sort((a, b) => a.id - b.id);
-                // Icono para ascendente (1 -> N)
+            
                 if(sortIcon) sortIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4 4m0 0l-4 4m4-4H7"></path>`;
             }
 
@@ -997,13 +989,11 @@
             const totalPages = currentChapter.imageUrls.length;
             const imageURL = currentChapter.imageUrls[currentPage - 1];
 
-            // 1. Cargar la imagen de la página actual
             const pageDisplay = document.getElementById('pageDisplay');
             
             const tempImg = new Image();
             tempImg.src = imageURL;
             
-            // Mostrar spinner o placeholder mientras carga (centrado por Flexbox)
             pageDisplay.innerHTML = `<p class="page-info-text" style="color: #a78bfa;">Cargando página...</p>`;
 
             tempImg.onload = () => {
@@ -1015,7 +1005,6 @@
                         onerror="this.onerror=null; this.src='https://via.placeholder.com/600x800/805ad5/ffffff?text=Error+Cargando+Imagen';"
                     />
                 `;
-                // 2. Actualiza los contadores y progreso
                 document.getElementById('pageCounterCurrent').textContent = currentPage;
                 document.getElementById('pageCounterTotal').textContent = totalPages;
                 document.getElementById('progressInput').max = totalPages;
@@ -1024,7 +1013,6 @@
                 const progress = (currentPage / totalPages) * 100;
                 document.getElementById('progressFill').style.width = progress + '%';
 
-                // 3. Deshabilitar/Habilitar botones
                 const isFirstPage = currentPage === 1;
                 const isLastPage = currentPage === totalPages;
 
@@ -1035,7 +1023,6 @@
                 document.querySelector('.nav-btn.next').disabled = isLastPage;
             };
 
-            // Para el caso de error de carga
             tempImg.onerror = () => {
                 pageDisplay.innerHTML = `<p class="page-info-text" style="color: red;">Error al cargar la imagen de la página.</p>`;
             };
@@ -1046,8 +1033,8 @@
             updateReaderView();
         });
 
-        // Initialize
         renderMangas();
     </script>
     </body>
+
 </html>
