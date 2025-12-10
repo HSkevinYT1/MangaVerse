@@ -2,7 +2,7 @@ const mangas = [
     {
         id: 1,
         title: "Chainsaw-man", 
-        cover:"Mangas/Chainsaw-man/Cover.jpg",
+        cover: "url('Mangas/Chainsaw-man/Cover.jpg')",
         chapters: 512, 
         status: "Publicandose",
         genres: ["Shonen"],
@@ -73,4 +73,5 @@ const mangas = [
         chapter_list: []
     }
 ];
+
 
