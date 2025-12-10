@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MangaVerse</title>
-    <base href="/[MangaVerse]/" id="base-url-tag">
     <script src="mangas.js"></script>
     <style>
         * {
@@ -33,7 +32,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3); 
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
         }
 
         .header-content {
@@ -111,7 +110,7 @@
 
         .user-btn:hover, .menu-btn:hover {
             background: rgba(168, 85, 247, 0.3);
-            transform: translateY(-2px); 
+            transform: translateY(-2px);
         }
 
         .view {
@@ -134,8 +133,8 @@
             border-radius: 24px;
             padding: 3rem;
             backdrop-filter: blur(10px);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4); 
-            animation: slideIn 0.8s ease-out; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            animation: slideIn 0.8s ease-out;
         }
 
         @keyframes slideIn {
@@ -165,7 +164,7 @@
         }
 
         .hero-btn:hover {
-            transform: scale(1.03); 
+            transform: scale(1.03);
             box-shadow: 0 0 20px rgba(236, 72, 153, 0.6);
         }
 
@@ -200,7 +199,7 @@
         }
 
         .manga-card:hover {
-            transform: translateY(-5px); 
+            transform: translateY(-5px);
             border-color: rgba(168, 85, 247, 0.5);
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
         }
@@ -210,19 +209,12 @@
             overflow: hidden;
             width: 100%; 
             padding-top: 150%; 
+            /* Estilos para la imagen de fondo */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
         
-      
-        .manga-cover img {
-            position: absolute; 
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover; 
-            display: block;
-        }
-
         .manga-status {
             position: absolute;
             top: 1rem;
@@ -469,7 +461,6 @@
             right: 0;
             width: 320px;
             height: calc(100% - 64px);
-           
             background: rgba(88, 28, 135, 0.9);
             backdrop-filter: blur(20px);
             border-left: 1px solid rgba(168, 85, 247, 0.3);
@@ -477,7 +468,7 @@
             transition: transform 0.3s ease-out;
             z-index: 90;
             overflow-y: auto;
-            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.7); 
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.7);
         }
 
         .sidebar.active {
@@ -506,17 +497,15 @@
             transition: all 0.3s;
         }
 
-       
         .chapter-btn:hover {
-            background: rgba(168, 85, 247, 0.15); 
-            transform: translateX(-5px); 
-            box-shadow: 0 0 10px rgba(168, 85, 247, 0.4); 
+            background: rgba(168, 85, 247, 0.15);
+            transform: translateX(-5px);
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
         }
 
         .chapter-btn.active-chapter {
-          
             background: linear-gradient(90deg, #ec4899, #9333ea);
-            color: white; 
+            color: white;
             font-weight: bold;
             box-shadow: 0 0 15px rgba(236, 72, 153, 0.5);
             transform: translateX(0);
@@ -573,7 +562,6 @@
             text-align: center;
         }
         
-       
         .welcome-reader {
             background: rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(15px);
@@ -591,7 +579,6 @@
             margin: 2rem auto;
         }
 
-       
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -602,6 +589,7 @@
             height: 225px;
             border-radius: 12px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            /* Usamos background-size/position para la portada del lector */
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -613,8 +601,6 @@
             transform: scale(1.05);
             box-shadow: 0 10px 40px rgba(236, 72, 153, 0.5);
         }
-       
-
 
         .nav-btn {
             position: absolute;
@@ -636,7 +622,7 @@
         }
 
         .nav-btn:disabled {
-            opacity: 0.3; 
+            opacity: 0.3;
             cursor: default;
         }
 
@@ -922,7 +908,7 @@
             <div class="page-container">
                 <div class="page-wrapper">
                     <div class="page-display" id="pageDisplay">
-                        </div>
+                    </div>
                 </div>
                 
                 <button class="nav-btn prev" onclick="prevPage()">
@@ -964,18 +950,16 @@
 
     <div class="modal" id="authModal">
         <div class="modal-content">
-            </div>
+        </div>
     </div>
 
     <script>
-      
         let currentUser = null;
         let selectedManga = null;
         let currentChapter = null;
         let currentPage = 1;
         let isLoginMode = true;
 
-      
         document.addEventListener('DOMContentLoaded', () => {
             checkAuth();
             renderHome();
@@ -1301,13 +1285,12 @@
 
             let progressBadge = '';
             if (historyEntry) {
-                progressBadge = `<div class="progress-badge">Cap. ${historyEntry.chapterId} - Pág. ${historyEntry.page}</div>`;
+                const chapterNum = manga.chapter_list.find(c => c.id === historyEntry.chapterId)?.title || `Cap. ${historyEntry.chapterId}`;
+                progressBadge = `<div class="progress-badge">${chapterNum} - Pág. ${historyEntry.page}</div>`;
             }
 
-        
             card.innerHTML = `
-                <div class="manga-cover">
-                    <img src="${manga.cover}" alt="Portada de ${manga.title}" loading="lazy" />
+                <div class="manga-cover" style="background-image: ${manga.cover}">
                     <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);"></div>
                     <div class="manga-status">${manga.status}</div>
                     <div class="manga-title-overlay">
@@ -1343,7 +1326,6 @@
             });
         }
 
-     
         function searchMangas(query, view) {
             const filtered = mangas.filter(manga => 
                 manga.title.toLowerCase().includes(query.toLowerCase())
@@ -1398,7 +1380,6 @@
             renderMangaGrid(filtered, 'catalogGrid');
         }
 
-      
         function showHome() {
             document.getElementById('homeView').classList.add('active');
             document.getElementById('catalogView').classList.remove('active');
@@ -1422,11 +1403,10 @@
             applyFilters(); 
         }
 
-     
         function openManga(manga) {
             selectedManga = manga;
             currentChapter = null;
-            currentPage = 1; 
+            currentPage = 1;
             
             document.getElementById('homeView').classList.remove('active');
             document.getElementById('catalogView').classList.remove('active');
@@ -1436,18 +1416,17 @@
             document.getElementById('chapterTitle').textContent = 'Selecciona un Capítulo';
             
             renderChapters();
-            document.getElementById('sidebar').classList.add('active'); 
+            document.getElementById('sidebar').classList.add('active');
 
             document.getElementById('bottomNav').style.display = 'none';
 
             const pageDisplay = document.getElementById('pageDisplay');
             
-         
             pageDisplay.innerHTML = `
                 <div class="welcome-reader">
                     <div 
                         class="welcome-reader-cover" 
-                        style="background-image: url('${manga.cover}');"
+                        style="background-image: ${manga.cover};"
                         onclick="toggleSidebar()"
                     ></div>
                     <div style="font-size: 1.75rem; color: #a78bfa; font-weight: bold;">¡Bienvenido a ${manga.title}!</div>
@@ -1560,4 +1539,3 @@
     </script>
 </body>
 </html>
-
