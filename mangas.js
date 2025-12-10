@@ -39,7 +39,7 @@ const mangas = [
     {
         id: 2,
         title: "Dr Stone",
-        cover:"Mangas/Dr Stone/Cover.jpg",
+        cover: "url('Mangas/Dr Stone/Cover.jpg')",
         chapters: 234,
         status: "Terminado",
         genres: ["Acción", "Drama"],
@@ -48,7 +48,7 @@ const mangas = [
     {
         id: 3,
         title: "Attack on Titan",
-        cover:"Mangas/Attack on Titan/Cover.jpg",
+        cover: "url('Mangas/Attack on titan/Cover.jpg')",
         chapters: 140,
         status: "Terminado",
         genres: ["Acción", "Militar", "Drama"],
@@ -57,7 +57,7 @@ const mangas = [
     {
         id: 4,
         title: "One Piece",
-        cover:"Mangas/One Piece/Cover.jpg",
+        cover: "url('Mangas/One piece/Cover.jpg')",
         chapters: 1168,
         status: "Publicandose",
         genres: ["Aventura", "Shonen", "Fantasía"],
@@ -66,12 +66,10 @@ const mangas = [
     {
         id: 5,
         title: "Jujutsu Kaisen",
-        cover:"Mangas/Jujutsu Kaisen/Cover.jpg",
+        cover: "url('Mangas/Jujutsu Kaisen/Cover.jpg')",
         chapters: 278,
         status: "Terminado",
         genres: ["Sobrenatural", "Acción"],
         chapter_list: []
     }
 ];
-
-
