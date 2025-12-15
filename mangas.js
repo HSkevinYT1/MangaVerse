@@ -56,7 +56,7 @@ const mangas = [
     {
         id: 3,
         title: "Attack on Titan",
-        cover: `${BASE_URL}Mangas/Attack on Titan/Cover.jpg`,
+        cover: `${BASE_URL}Mangas/Attack on titan/Cover.jpg`,
         chapters: 140,
         status: "Terminado",
         genres: ["Acción", "Militar", "Drama"],
@@ -65,7 +65,7 @@ const mangas = [
     {
         id: 4,
         title: "One Piece",
-        cover: `${BASE_URL}Mangas/One Piece/Cover.jpg`,
+        cover: `${BASE_URL}Mangas/One piece/Cover.jpg`,
         chapters: 1168,
         status: "Publicandose",
         genres: ["Aventura", "Shonen", "Fantasía"],
@@ -134,3 +134,4 @@ const mangas = [
         ]
     }
 ];
+
