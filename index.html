@@ -209,12 +209,24 @@
             overflow: hidden;
             width: 100%; 
             padding-top: 150%; 
-            /* Estilos para la imagen de fondo */
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(236, 72, 153, 0.1));
         }
         
+        .manga-cover img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: opacity 0.3s;
+        }
+
+        .manga-cover img[data-loading="true"] {
+            opacity: 0;
+        }
+
         .manga-status {
             position: absolute;
             top: 1rem;
@@ -264,7 +276,6 @@
         .genre-tag:hover {
              background: rgba(168, 85, 247, 0.4);
         }
-
 
         .manga-stats {
             display: flex;
@@ -479,6 +490,28 @@
             padding: 1.5rem;
         }
 
+        .chapter-sort-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(168, 85, 247, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .chapter-sort-btn:hover {
+            background: rgba(168, 85, 247, 0.5);
+            transform: translateY(-2px);
+        }
+
         .chapter-list {
             display: flex;
             flex-direction: column;
@@ -531,7 +564,6 @@
             border-radius: 12px;
             backdrop-filter: blur(10px);
             border: 2px solid rgba(168, 85, 247, 0.4);
-            
             width: fit-content;
             max-width: 100%;
             margin: 0 auto;
@@ -589,7 +621,6 @@
             height: 225px;
             border-radius: 12px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            /* Usamos background-size/position para la portada del lector */
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -900,6 +931,12 @@
         <div class="sidebar" id="sidebar">
             <div class="sidebar-content">
                 <h3 style="color: #a78bfa; margin-bottom: 1rem;">CAPÍTULOS</h3>
+                <button class="chapter-sort-btn" onclick="toggleChapterSort()">
+                    <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
+                    </svg>
+                    <span id="sortBtnText">Ordenar: Mayor a Menor</span>
+                </button>
                 <div class="chapter-list" id="chapterList"></div>
             </div>
         </div>
@@ -907,8 +944,7 @@
         <main class="reader-main">
             <div class="page-container">
                 <div class="page-wrapper">
-                    <div class="page-display" id="pageDisplay">
-                    </div>
+                    <div class="page-display" id="pageDisplay"></div>
                 </div>
                 
                 <button class="nav-btn prev" onclick="prevPage()">
@@ -949,8 +985,7 @@
     </div>
 
     <div class="modal" id="authModal">
-        <div class="modal-content">
-        </div>
+        <div class="modal-content"></div>
     </div>
 
     <script>
@@ -959,6 +994,7 @@
         let currentChapter = null;
         let currentPage = 1;
         let isLoginMode = true;
+        let chapterSortAscending = false; 
 
         document.addEventListener('DOMContentLoaded', () => {
             checkAuth();
@@ -1277,21 +1313,32 @@
             });
         }
 
-
         function createMangaCard(manga, historyEntry = null) {
             const card = document.createElement('div');
             card.className = 'manga-card';
-            card.onclick = () => openManga(manga);
+            
+            card.onclick = () => {
+                if (historyEntry) {
+                    openMangaFromHistory(manga, historyEntry);
+                } else {
+                    openManga(manga);
+                }
+            };
 
             let progressBadge = '';
             if (historyEntry) {
-                const chapterNum = manga.chapter_list.find(c => c.id === historyEntry.chapterId)?.title || `Cap. ${historyEntry.chapterId}`;
-                progressBadge = `<div class="progress-badge">${chapterNum} - Pág. ${historyEntry.page}</div>`;
+                progressBadge = `<div class="progress-badge">Cap. ${historyEntry.chapterId} - Pág. ${historyEntry.page}</div>`;
             }
 
             card.innerHTML = `
-                <div class="manga-cover" style="background-image: ${manga.cover}">
-                    <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);"></div>
+                <div class="manga-cover">
+                    <img 
+                        src="${manga.cover}" 
+                        alt="Portada de ${manga.title}" 
+                        loading="lazy"
+                        onerror="this.src='https://via.placeholder.com/280x420/1e1b4b/a78bfa?text=Sin+Portada'"
+                    />
+                    <div></div>
                     <div class="manga-status">${manga.status}</div>
                     <div class="manga-title-overlay">
                         <h3>${manga.title}</h3>
@@ -1403,6 +1450,28 @@
             applyFilters(); 
         }
 
+        function openMangaFromHistory(manga, historyEntry) {
+            selectedManga = manga;
+            currentChapter = manga.chapter_list.find(ch => ch.id === historyEntry.chapterId);
+            currentPage = historyEntry.page;
+            
+            document.getElementById('homeView').classList.remove('active');
+            document.getElementById('catalogView').classList.remove('active');
+            document.getElementById('readerView').classList.add('active');
+            
+            document.getElementById('readerTitle').textContent = manga.title;
+            
+            if (currentChapter) {
+                document.getElementById('chapterTitle').textContent = currentChapter.title;
+                document.getElementById('bottomNav').style.display = 'flex';
+                renderChapters();
+                updateReaderView();
+            } else {
+                openManga(manga);
+            }
+        }
+
+      
         function openManga(manga) {
             selectedManga = manga;
             currentChapter = null;
@@ -1417,16 +1486,14 @@
             
             renderChapters();
             document.getElementById('sidebar').classList.add('active');
-
             document.getElementById('bottomNav').style.display = 'none';
 
             const pageDisplay = document.getElementById('pageDisplay');
-            
             pageDisplay.innerHTML = `
                 <div class="welcome-reader">
                     <div 
                         class="welcome-reader-cover" 
-                        style="background-image: ${manga.cover};"
+                        style="background-image: url('${manga.cover}');"
                         onclick="toggleSidebar()"
                     ></div>
                     <div style="font-size: 1.75rem; color: #a78bfa; font-weight: bold;">¡Bienvenido a ${manga.title}!</div>
@@ -1455,13 +1522,28 @@
             document.getElementById('sidebar').classList.toggle('active');
         }
 
+        function toggleChapterSort() {
+            chapterSortAscending = !chapterSortAscending;
+            const sortBtnText = document.getElementById('sortBtnText');
+            sortBtnText.textContent = chapterSortAscending ? 'Ordenar: Menor a Mayor' : 'Ordenar: Mayor a Menor';
+            renderChapters();
+        }
+
         function renderChapters() {
             const chapterList = document.getElementById('chapterList');
             chapterList.innerHTML = '';
 
             if (!selectedManga || !selectedManga.chapter_list) return;
 
-            selectedManga.chapter_list.forEach(chapter => {
+           
+            let sortedChapters = [...selectedManga.chapter_list];
+            if (chapterSortAscending) {
+                sortedChapters.sort((a, b) => a.id - b.id); 
+            } else {
+                sortedChapters.sort((a, b) => b.id - a.id); 
+            }
+
+            sortedChapters.forEach(chapter => {
                 const btn = document.createElement('button');
                 btn.className = 'chapter-btn';
                 if (currentChapter && currentChapter.id === chapter.id) {
