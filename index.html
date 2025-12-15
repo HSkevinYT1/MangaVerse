@@ -1619,5 +1619,20 @@
             }
         }
     </script>
+    <script>
+       
+        console.log('=== DIAGNÓSTICO DE RUTAS ===');
+        console.log('URL actual:', window.location.href);
+        console.log('Hostname:', window.location.hostname);
+        console.log('Pathname:', window.location.pathname);
+        if (typeof BASE_URL !== 'undefined') {
+            console.log('BASE_URL:', BASE_URL);
+            console.log('Primera cover:', mangas[0].cover);
+        }
+        console.log('==============================');
+
+      
+        let currentUser = null;
 </body>
 </html>
+
